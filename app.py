@@ -1,7 +1,7 @@
 import logging
 import os
-import subprocess
 import signal
+import subprocess
 import sys
 
 from flask import Flask, jsonify, make_response
@@ -31,7 +31,7 @@ def get_state():
     elif process_name == 'pgsync':
         state = 'RUNNING'
     else:
-        state =  'Unknown'
+        state =  'UNKNOWN'
     return state
 
 
