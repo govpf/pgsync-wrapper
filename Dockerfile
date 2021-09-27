@@ -4,4 +4,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD ["python", "-m", "flask", "run"]
+ENV PORT 5000
+COPY docker/docker-entrypoint.sh /app/
+ENTRYPOINT [ "/app/docker-entrypoint.sh" ]

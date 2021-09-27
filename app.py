@@ -22,8 +22,6 @@ def get_process_name():
 
 
 def get_state():
-    global process
-
     process_name = get_process_name()
 
     if process_name == 'bootstrap':
