@@ -26,11 +26,14 @@ def get_state():
 
     if process_name == 'bootstrap':
         state = 'INITIALIZATION'
+        message = 'Initialisation'
     elif process_name == 'pgsync':
         state = 'RUNNING'
+        message = 'OK'
     else:
-        state =  'UNKNOWN'
-    return state
+        state =  'DOWN'
+        message = "PGSync n'a pas pu démarrer. Veuillez vérifier les logs."
+    return state, message
 
 
 def start_pgsync():
@@ -86,9 +89,11 @@ def start():
 
 @app.route('/health', methods=['GET'])
 def healthcheck():
+    stage, message = get_state()
     return jsonify({
         'status': 200,
-        'state': get_state(),
+        'state': stage,
+        'message': message,
     })
 
 
