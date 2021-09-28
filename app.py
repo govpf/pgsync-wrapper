@@ -3,9 +3,10 @@ import os
 import signal
 import subprocess
 import sys
+from functools import wraps
 
-from flask import Flask, jsonify, make_response
 import psutil
+from flask import Flask, abort, jsonify, make_response, request
 
 
 app = Flask(__name__)
@@ -43,7 +44,19 @@ def start_pgsync():
 process = start_pgsync()
 
 
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        key = os.environ.get('API_KEY', 'zzGvtoVbBg43+JnVVvbhsvgHXJNFIqL7')
+        if request.headers.get('x-api-key') and request.headers.get('x-api-key') == key:
+            return f(*args, **kwargs)
+        else:
+            abort(make_response(jsonify(message="Not authorized"), 401))
+    return decorated_function
+
+
 @app.route('/kill', methods=['POST'])
+@require_api_key
 def kill():
     global process
 
@@ -68,6 +81,7 @@ def kill():
 
 
 @app.route('/start', methods=['POST'])
+@require_api_key
 def start():
     global process
 
