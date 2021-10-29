@@ -1,4 +1,4 @@
-FROM govpf/pgsync:2.1.2
+FROM govpf/pgsync:2.1.7
 
 WORKDIR /app
 COPY requirements.txt .
